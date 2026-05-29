@@ -30,7 +30,7 @@ export const buildPaginationMeta = (
   };
 };
 
-// Build SQL pagination clause
+// Safe: limit and offset are always validated integers from getPaginationParams
 export const paginationSQL = (limit: number, offset: number): string => {
   return `LIMIT ${limit} OFFSET ${offset}`;
 };

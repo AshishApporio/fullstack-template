@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const useLocalStorage = <T>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -12,17 +12,30 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
   });
 
   const setValue = (value: T | ((prev: T) => T)) => {
-    const valueToStore = value instanceof Function ? value(storedValue) : value;
-    setStoredValue(valueToStore);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(key, JSON.stringify(valueToStore));
-    }
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(key, JSON.stringify(valueToStore));
+      }
+    } catch { /* ignore */ }
   };
 
   const removeValue = () => {
     setStoredValue(initialValue);
     if (typeof window !== 'undefined') localStorage.removeItem(key);
   };
+
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key !== key || e.newValue === null) return;
+      try {
+        setStoredValue(JSON.parse(e.newValue) as T);
+      } catch { /* ignore */ }
+    };
+    window.addEventListener('storage', handler);
+    return () => window.removeEventListener('storage', handler);
+  }, [key]);
 
   return [storedValue, setValue, removeValue] as const;
 };

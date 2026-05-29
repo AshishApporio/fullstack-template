@@ -10,9 +10,9 @@ const logFormat = printf(({ level, message, timestamp, stack }) => {
 export const logger = winston.createLogger({
   level: env.NODE_ENV === 'production' ? 'warn' : 'debug',
   format: combine(
+    env.NODE_ENV === 'development' ? colorize({ all: true }) : winston.format.uncolorize(),
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     errors({ stack: true }),
-    env.NODE_ENV === 'development' ? colorize() : winston.format.uncolorize(),
     logFormat
   ),
   transports: [

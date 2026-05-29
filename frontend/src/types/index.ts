@@ -1,3 +1,5 @@
+export * from './api.types';
+
 export interface User {
   id: string;
   email: string;

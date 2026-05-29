@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import type { PoolClient } from 'pg';
 import { env } from './env';
 import { logger } from '../utils/logger.util';
 
@@ -17,9 +18,9 @@ pool.on('connect', () => {
   logger.info('✅ New DB client connected');
 });
 
-pool.on('error', (err) => {
+pool.on('error', (err: Error) => {
   logger.error('❌ DB pool error:', err);
-  process.exit(1);
+  // Pool recovers from idle client errors — do not exit
 });
 
 export const connectDB = async (): Promise<void> => {
@@ -38,7 +39,7 @@ export const query = <T = any>(
 
 // Transaction helper
 export const withTransaction = async <T>(
-  callback: (client: any) => Promise<T>
+  callback: (client: PoolClient) => Promise<T>
 ): Promise<T> => {
   const client = await pool.connect();
   try {
