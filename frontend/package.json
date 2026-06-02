@@ -21,7 +21,9 @@
     "zod": "^3.22.4",
     "zustand": "^4.4.7",
     "@hookform/resolvers": "^3.3.4",
-    "sonner": "^1.4.41"
+    "sonner": "^1.4.41",
+    "lucide-react": "^0.400.0",
+    "next-themes": "^0.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-secondary-900 antialiased dark:bg-secondary-950 dark:text-secondary-50;
+  }
+
+  /* Focus ring consistent with design tokens */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-white dark:ring-offset-secondary-950;
+  }
+}
